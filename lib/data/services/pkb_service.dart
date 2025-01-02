@@ -5,7 +5,7 @@ import '../models/pkb.dart';
 
 class PKBService {
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.18.249:5000/api',
+    baseUrl: 'http://192.168.17.130:5000/api',
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));
@@ -18,6 +18,19 @@ class PKBService {
     } catch (e) {
       print('Error fetching PKBs: $e');
       throw 'Failed to load PKBs';
+    }
+  }
+
+  Future<void> updatePKBLayanan(String pkbId, List<String> layananIds) async {
+    try {
+      print('Updating PKB $pkbId with layanan: $layananIds');
+      await _dio.patch('/pkb/$pkbId', data: {
+        'layanan': layananIds
+      });
+      print('Layanan updated successfully');
+    } catch (e) {
+      print('Error updating layanan: $e');
+      throw 'Failed to update layanan: $e';
     }
   }
 

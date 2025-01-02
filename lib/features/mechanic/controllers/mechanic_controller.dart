@@ -1,5 +1,5 @@
 // lib/features/mechanic/controllers/mechanic_controller.dart
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/models/pkb.dart';
 import '../../../data/services/pkb_service.dart';
@@ -24,6 +24,27 @@ class MechanicController extends GetxController {
       Get.snackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> updatePKBLayanan(String pkbId, List<String> layananIds) async {
+    try {
+      await _pkbService.updatePKBLayanan(pkbId, layananIds);
+      await fetchPKBs(); // Refresh the list after update
+      Get.snackbar(
+        'Success',
+        'Layanan berhasil diperbarui',
+        backgroundColor: Colors.green.withOpacity(0.7),
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Gagal memperbarui layanan',
+        backgroundColor: Colors.red.withOpacity(0.7),
+        colorText: Colors.white,
+      );
+      throw e;
     }
   }
 

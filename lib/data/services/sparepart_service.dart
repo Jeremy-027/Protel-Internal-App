@@ -5,7 +5,7 @@ import '../models/sparepart.dart';
 
 class SparepartService {
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.18.249:5000/api',
+    baseUrl: 'http://192.168.17.130:5000/api',
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));
