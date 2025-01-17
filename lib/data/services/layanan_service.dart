@@ -1,11 +1,11 @@
 // lib/data/services/layanan_service.dart
-
+import 'api_config.dart';
 import 'package:dio/dio.dart';
 import '../models/layanan.dart';
 
 class LayananService {
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.17.130:5000/api',
+    baseUrl: ApiConfig.baseUrl,
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));

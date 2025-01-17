@@ -92,14 +92,14 @@ class Vehicle {
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
     return Vehicle(
-      id: json['_id'],
-      noPolisi: json['noPolisi'],
-      noRangka: json['noRangka'],
-      noMesin: json['noMesin'],
-      tipe: json['tipe'],
-      tahun: json['tahun'],
-      produk: json['produk'],
-      kilometer: json['kilometer'],
+      id: json['_id'] ?? 'N/A',
+      noPolisi: json['noPolisi'] ?? 'N/A',
+      noRangka: json['noRangka'] ?? 'N/A',
+      noMesin: json['noMesin'] ?? 'N/A',
+      tipe: json['tipe'] ?? 'N/A',
+      tahun: json['tahun'] ?? 0,
+      produk: json['produk'] ?? 'N/A',
+      kilometer: json['kilometer'] ?? 0,
     );
   }
 }
@@ -148,9 +148,9 @@ class PKB {
       spareparts: (json['spareparts'] as List)
           .map((s) => Sparepart.fromJson(s))
           .toList(),
-      responsMekanik: json['responsMekanik'],
+      responsMekanik: json['responsMekanik'] ?? '-',
       customer: Customer.fromJson(json['customer']),
-      vehicle: Vehicle.fromJson(json['vehicle']),
+      vehicle: Vehicle.fromJson(json['vehicle'] ?? {}),  // Provide empty map if null
     );
   }
 }

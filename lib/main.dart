@@ -1,4 +1,5 @@
 // lib/main.dart
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
@@ -9,11 +10,12 @@ import 'features/mechanic/screens/mechanic_home_screen.dart';
 import 'features/mechanic/screens/sparepart_screen.dart';
 import 'features/security/controllers/security_controller.dart';
 import 'data/services/service_api.dart';
+import 'data/services/api_config.dart';
 import 'features/auth/controllers/auth_controller.dart';
 
 void main() {
   final dio = Dio(BaseOptions(
-    baseUrl: 'http://192.168.17.130:5000/api',
+    baseUrl: ApiConfig.baseUrl,
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ))..interceptors.add(LogInterceptor(
@@ -21,9 +23,10 @@ void main() {
     responseBody: true,
     error: true,
   ));
-  print('Attempting to connect to: http://192.168.17.130:5000/api');
 
-  final serviceApi = ServiceApi(dio);
+  print('Connecting to: ${ApiConfig.baseUrl}');
+
+  final serviceApi = ServiceApi();
 
   runApp(MyApp(serviceApi: serviceApi));
 }

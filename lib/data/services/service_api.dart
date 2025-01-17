@@ -2,19 +2,21 @@
 
 import 'package:dio/dio.dart';
 import '../models/service.dart';
+import 'api_config.dart';
 
 class ServiceApi {
-  final Dio _dio;
-
-  ServiceApi(this._dio);
+  final Dio _dio = Dio(BaseOptions(
+    baseUrl: ApiConfig.baseUrl,
+    connectTimeout: const Duration(seconds: 5),
+    receiveTimeout: const Duration(seconds: 3),
+  ));
 
   Future<void> createService(Map<String, dynamic> serviceData) async {
     try {
       print('Creating ticket with data: $serviceData');
-      // Convert kilometer to int before sending
       final formattedData = {
         'noPolisi': serviceData['noPolisi'],
-        'kilometer': serviceData['kilometer'], // Already an int from TextField
+        'kilometer': serviceData['kilometer'].toString(), // Convert to String
         'tanggalMasuk': DateTime.now().toIso8601String(),
       };
 
@@ -23,24 +25,41 @@ class ServiceApi {
     } on DioException catch (e) {
       print('Error creating ticket: ${e.response?.data}');
       print('Attempted URL: ${e.requestOptions.uri}');
-      throw 'Failed to create ticket: ${e.message}';
+      throw _handleDioError(e);
     }
   }
 
-
   Future<List<Service>> getServices() async {
     try {
-      print('Attempting to connect to: ${_dio.options.baseUrl}/services');
-
+      print('Fetching services...');
       final response = await _dio.get('/tickets');
       print('Response received: ${response.data}');
 
+      if (!response.data.containsKey('services')) {
+        throw 'Invalid response format';
+      }
+
       final List<dynamic> servicesJson = response.data['services'];
       return servicesJson.map((json) => Service.fromJson(json)).toList();
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     } catch (e) {
       print('Error fetching services: $e');
       throw 'Failed to load services: $e';
     }
   }
 
+  String _handleDioError(DioException e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        return 'Connection timeout. Please check your internet connection.';
+      case DioExceptionType.receiveTimeout:
+        return 'Server not responding. Please try again.';
+      case DioExceptionType.badResponse:
+        final message = e.response?.data?['message'];
+        return message ?? 'Server error: ${e.response?.statusCode}';
+      default:
+        return 'Connection failed. Please check your internet connection.';
+    }
+  }
 }
