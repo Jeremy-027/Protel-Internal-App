@@ -43,45 +43,48 @@ class PKBDetailDialog extends StatelessWidget {
               SizedBox(height: 16),
 
               // Vehicle Details
-              Text('No. Polisi : ${pkb.vehicle.noPolisi}', style: TextStyle(fontSize: 14)),
-              Text('Kilometer : ${pkb.kilometer}', style: TextStyle(fontSize: 14)),
-              Text('No. Rangka : ${pkb.vehicle.noRangka}', style: TextStyle(fontSize: 14)),
-              Text('No. Mesin : ${pkb.vehicle.noMesin}', style: TextStyle(fontSize: 14)),
-              Text('Type : ${pkb.vehicle.tipe}', style: TextStyle(fontSize: 14)),
-              Text('Tahun : ${pkb.vehicle.tahun}', style: TextStyle(fontSize: 14)),
-              Text('Produk : ${pkb.vehicle.produk}', style: TextStyle(fontSize: 14)),
+              if (pkb.vehicle != null) ...[
+                Text('No. Polisi : ${pkb.vehicle!.noPolisi}', style: TextStyle(fontSize: 14)),
+                Text('Kilometer : ${pkb.kilometer}', style: TextStyle(fontSize: 14)),
+                Text('No. Rangka : ${pkb.vehicle!.noRangka}', style: TextStyle(fontSize: 14)),
+                Text('No. Mesin : ${pkb.vehicle!.noMesin}', style: TextStyle(fontSize: 14)),
+                Text('Type : ${pkb.vehicle!.tipe}', style: TextStyle(fontSize: 14)),
+                Text('Tahun : ${pkb.vehicle!.tahun}', style: TextStyle(fontSize: 14)),
+                Text('Produk : ${pkb.vehicle!.produk}', style: TextStyle(fontSize: 14)),
+              ],
 
-              // Layanan Section
-              SizedBox(height: 16),
-              Text('Layanan:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-              ...pkb.layanan.map((layanan) => Padding(
-                padding: const EdgeInsets.only(left: 16, top: 4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('• ${layanan.namaLayanan}', style: TextStyle(fontSize: 14)),
-                    Text('  Harga: Rp ${NumberFormat('#,###').format(layanan.harga)}',
-                        style: TextStyle(fontSize: 14)),
-                  ],
-                ),
-              )),
-
-              // Spareparts Section
-              SizedBox(height: 16),
-              Text('Spareparts:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-              ...pkb.spareparts.map((sparepart) => Padding(
-                padding: const EdgeInsets.only(left: 16, top: 4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('• ${sparepart.namaPart}', style: TextStyle(fontSize: 14)),
-                    Text('  Part Number: ${sparepart.number}', style: TextStyle(fontSize: 14)),
-                    Text('  Stock: ${sparepart.stock}', style: TextStyle(fontSize: 14)),
-                    Text('  Harga: Rp ${NumberFormat('#,###').format(sparepart.harga)}',
-                        style: TextStyle(fontSize: 14)),
-                  ],
-                ),
-              )),
+              if (pkb.summary != null) ...[
+                SizedBox(height: 16),
+                Text('Summary:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                ...pkb.summary!.layanan.map((layanan) => Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('• ${layanan.namaLayanan} (${layanan.quantity}x)',
+                          style: TextStyle(fontSize: 14)),
+                      Text('  Harga: Rp ${NumberFormat('#,###').format(layanan.total)}',
+                          style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                )),
+                SizedBox(height: 8),
+                ...pkb.summary!.sparepart.map((sparepart) => Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('• ${sparepart.namaPart} (${sparepart.quantity}x)',
+                          style: TextStyle(fontSize: 14)),
+                      Text('  Harga: Rp ${NumberFormat('#,###').format(sparepart.total)}',
+                          style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                )),
+                SizedBox(height: 8),
+                Text('Total Harga: Rp ${NumberFormat('#,###').format(pkb.summary!.totalHarga)}',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              ],
 
               // Keluhan Section
               SizedBox(height: 16),
@@ -159,7 +162,7 @@ class PKBDetailDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Text('Simpan', style: TextStyle(color: Colors.white),),
+                    child: Text('Simpan'),
                   ),
                 ],
               ),

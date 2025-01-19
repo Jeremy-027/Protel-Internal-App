@@ -12,22 +12,16 @@ import 'features/security/controllers/security_controller.dart';
 import 'data/services/service_api.dart';
 import 'data/services/api_config.dart';
 import 'features/auth/controllers/auth_controller.dart';
+import 'features/mechanic/controllers/mechanic_controller.dart';
 
 void main() {
   final dio = Dio(BaseOptions(
     baseUrl: ApiConfig.baseUrl,
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
-  ))..interceptors.add(LogInterceptor(
-    requestBody: true,
-    responseBody: true,
-    error: true,
   ));
-
   print('Connecting to: ${ApiConfig.baseUrl}');
-
   final serviceApi = ServiceApi();
-
   runApp(MyApp(serviceApi: serviceApi));
 }
 
@@ -55,6 +49,7 @@ class MyApp extends StatelessWidget {
       initialBinding: BindingsBuilder(() {
         Get.put(SecurityController(serviceApi));
         Get.put(AuthController());
+        Get.put(MechanicController());
       }),
       getPages: [
         GetPage(

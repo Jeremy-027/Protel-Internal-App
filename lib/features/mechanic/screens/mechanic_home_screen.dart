@@ -9,7 +9,7 @@ import '../../../widgets/custom_bottom_navbar.dart';
 import '../widgets/pkb_detail_dialog.dart';
 
 class MechanicHomeScreen extends StatelessWidget {
-  final MechanicController controller = Get.put(MechanicController());
+  final MechanicController controller = Get.find<MechanicController>();
 
   MechanicHomeScreen({Key? key}) : super(key: key);
 
@@ -47,7 +47,7 @@ class MechanicHomeScreen extends StatelessWidget {
                 }
 
                 if (controller.pkbs.isEmpty) {
-                  return const Center(child: Text('No PKB data available'));
+                  return const Center(child: Text('No PKB available'));
                 }
 
                 return ListView.builder(
@@ -115,20 +115,24 @@ class MechanicHomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      'No Polisi: ${pkb.vehicle.noPolisi}',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    const SizedBox(height: 4),
+                    if (pkb.vehicle != null) ...[
+                      Text(
+                        'No Polisi: ${pkb.vehicle!.noPolisi}',
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
                     Text(
                       'Tanggal Masuk: ${DateFormat('dd/MM/yyyy   HH:mm').format(pkb.tanggalWaktu)}',
                       style: const TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      'Kilometer: ${pkb.kilometer}',
-                      style: const TextStyle(fontSize: 14),
-                    ),
+                    if (pkb.summary != null) ...[
+                      Text(
+                        'Total: Rp ${NumberFormat('#,###').format(pkb.summary!.totalHarga)}',
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -137,9 +141,7 @@ class MechanicHomeScreen extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton(
-              onPressed: () {
-                Get.dialog(PKBDetailDialog(pkb: pkb));
-              },
+              onPressed: () => Get.dialog(PKBDetailDialog(pkb: pkb)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF4A3780),
                 padding: const EdgeInsets.symmetric(

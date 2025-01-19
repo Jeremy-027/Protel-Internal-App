@@ -18,10 +18,20 @@ class MechanicController extends GetxController {
 
   Future<void> fetchPKBs() async {
     try {
+      print('MechanicController: Starting PKB fetch');
       isLoading.value = true;
-      pkbs.value = await _pkbService.getPKBs();
+      final fetchedPkbs = await _pkbService.getPKBs();
+      print('MechanicController: Received ${fetchedPkbs.length} PKBs');
+      pkbs.value = fetchedPkbs;
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      print('MechanicController error: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to load PKBs: $e',
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.red.withOpacity(0.7),
+        colorText: Colors.white,
+      );
     } finally {
       isLoading.value = false;
     }
