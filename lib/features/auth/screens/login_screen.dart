@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 28.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 'assets/images/logo.png',
                 height: 100,
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 30),
               const Text(
                 'Sign In',
                 style: TextStyle(
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _handleLogin,
                 style: ElevatedButton.styleFrom(

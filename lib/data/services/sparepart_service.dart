@@ -10,17 +10,21 @@ class SparepartService {
     receiveTimeout: const Duration(seconds: 3),
   ));
 
-  Future<List<Sparepart>> searchSpareparts(String query) async {
+  Future<List<Sparepart>> getAllSpareparts() async {
     try {
-      final response = await _dio.get('/spareparts', queryParameters: {
-        'search': query,
-      });
+      print('Fetching spareparts...');
+      final response = await _dio.get('/spareparts');
+      print('Response received: ${response.data}');
+
+      if (response.data == null || !response.data.containsKey('spareparts')) {
+        return [];
+      }
 
       final List<dynamic> sparepartsJson = response.data['spareparts'];
       return sparepartsJson.map((json) => Sparepart.fromJson(json)).toList();
     } catch (e) {
-      print('Error searching spareparts: $e');
-      throw 'Failed to search spareparts';
+      print('Error fetching spareparts: $e');
+      throw 'Failed to load spareparts: $e';
     }
   }
 }

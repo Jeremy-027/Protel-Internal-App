@@ -7,21 +7,37 @@ import '../../../data/services/sparepart_service.dart';
 class SparepartController extends GetxController {
   final SparepartService _sparepartService = SparepartService();
   final RxBool isLoading = false.obs;
-  final RxList<Sparepart> searchResults = <Sparepart>[].obs;
+  final RxList<Sparepart> allSpareparts = <Sparepart>[].obs;
+  final RxList<Sparepart> filteredSpareparts = <Sparepart>[].obs;
 
-  Future<void> searchSpareparts(String query) async {
+  @override
+  void onInit() {
+    super.onInit();
+    fetchSpareparts();
+  }
+
+  Future<void> fetchSpareparts() async {
     try {
       isLoading.value = true;
-      final results = await _sparepartService.searchSpareparts(query);
-      searchResults.value = results;
+      final spareparts = await _sparepartService.getAllSpareparts();
+      allSpareparts.value = spareparts;
+      filteredSpareparts.value = spareparts; // Show all initially
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      print('Error fetching spareparts: $e');
+      Get.snackbar('Error', 'Failed to load spareparts');
     } finally {
       isLoading.value = false;
     }
   }
 
-  void clearSearch() {
-    searchResults.clear();
+  void filterSpareparts(String query) {
+    if (query.isEmpty) {
+      filteredSpareparts.value = allSpareparts;
+    } else {
+      filteredSpareparts.value = allSpareparts.where((sparepart) =>
+      sparepart.namaPart.toLowerCase().contains(query.toLowerCase()) ||
+          sparepart.number.toLowerCase().contains(query.toLowerCase())
+      ).toList();
+    }
   }
 }

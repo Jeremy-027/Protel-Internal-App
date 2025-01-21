@@ -13,6 +13,7 @@ import 'data/services/service_api.dart';
 import 'data/services/api_config.dart';
 import 'features/auth/controllers/auth_controller.dart';
 import 'features/mechanic/controllers/mechanic_controller.dart';
+import 'features/mechanic/controllers/sparepart_controller.dart';
 
 void main() {
   final dio = Dio(BaseOptions(
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         Get.put(SecurityController(serviceApi));
         Get.put(AuthController());
         Get.put(MechanicController());
+        Get.put(SparepartController());
       }),
       getPages: [
         GetPage(
